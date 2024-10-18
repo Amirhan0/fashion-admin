@@ -14,7 +14,8 @@ import {
   Button,
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchCategories } from '../redux/categoryesSlice';
+import { deleteCategory, fetchCategories, updateCategory } from '../redux/categoryesSlice';
+import CategoryesAdd from '../components/CategoryesAdd';
 
 const Categoryes = () => {
   const dispatch = useDispatch();
@@ -22,8 +23,8 @@ const Categoryes = () => {
   const loading = useSelector((state) => state.categories.loading);
 
   const [open, setOpen] = useState(false);
-  const [currentCategory, setCurrentCategory] = useState(null);
   const [editedName, setEditedName] = useState('');
+  const [currentCategory, setCurrentCategory] = useState(null); 
 
   useEffect(() => {
     dispatch(fetchCategories());
@@ -41,8 +42,31 @@ const Categoryes = () => {
   };
 
   const handleSave = () => {
-    console.log(`Сохранено: ${editedName}`);
-    handleClose();
+    const updatedData = {
+      nameCategory: editedName,
+      categoryId: currentCategory.categoryId,
+    };
+  
+    dispatch(updateCategory({ categoryId: currentCategory._id, updatedData })) 
+      .unwrap()
+      .then((response) => {
+        console.log('Успешное обновление', response);
+        handleClose();
+      })
+      .catch((error) => {
+        console.error('Ошибка при обновлении', error);
+      });
+  };
+
+  const handleDelete = (categoryId) => {
+    dispatch(deleteCategory(categoryId))
+      .unwrap()
+      .then((response) => {
+        console.log('Успешное удаление', response);
+      })
+      .catch((error) => {
+        console.error('Ошибка при удалении', error);
+      });
   };
 
   return (
@@ -53,7 +77,7 @@ const Categoryes = () => {
       ) : (
         <List>
           {categoryes.map((category) => (
-            <ListItem key={category.id}>
+            <ListItem key={category.categoryId}> 
               <ListItemText
                 primary={category.nameCategory}
                 secondary={`Айди категории: ${category.categoryId}`}
@@ -61,14 +85,10 @@ const Categoryes = () => {
                 secondaryTypographyProps={{ color: 'text.secondary' }}
               />
               <Stack direction='row' spacing={2}>
-                <Button
-                  variant='contained'
-                  color='success'
-                  onClick={() => handleOpen(category)}
-                >
+                <Button variant='contained' color='success' onClick={() => handleOpen(category)}>
                   Редактировать
                 </Button>
-                <Button variant='outlined' color='error'>
+                <Button variant='outlined' color='error' onClick={() => handleDelete(category.categoryId)}>
                   Удалить
                 </Button>
               </Stack>
@@ -86,8 +106,16 @@ const Categoryes = () => {
             label='Название категории'
             fullWidth
             variant='outlined'
-            value={editedName}
-            onChange={(e) => setEditedName(e.target.value)}
+            value={editedName} 
+            onChange={(e) => setEditedName(e.target.value)} 
+          />
+          <TextField
+            margin='dense'
+            label='Айди категории'
+            fullWidth
+            variant='outlined'
+            value={currentCategory?.categoryId} 
+            disabled 
           />
         </DialogContent>
         <DialogActions>
@@ -99,6 +127,8 @@ const Categoryes = () => {
           </Button>
         </DialogActions>
       </Dialog>
+
+      <CategoryesAdd />
     </div>
   );
 };

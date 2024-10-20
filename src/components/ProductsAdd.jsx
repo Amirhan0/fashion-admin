@@ -23,7 +23,7 @@ export default function ProductsAdd() {
     name: '', price: '', description: '', image: '', categoryId: '', size: [],
   });
 
-  const [selectedSize, setSelectedSize] = useState([]); // Инициализация состояния
+  const [selectedSize, setSelectedSize] = useState([]); 
 
   const handleSizeChange = (event, newSizes) => setSelectedSize(newSizes);
 
@@ -36,7 +36,7 @@ export default function ProductsAdd() {
 
       await axios.post('http://localhost:4000/api/products', productToAdd);
       setNewProduct({ name: '', price: '', description: '', image: '', categoryId: '', size: [] });
-      setSelectedSize([]); // Сброс размера после добавления продукта
+      setSelectedSize([]); 
       dispatch(fetchProducts());
     } catch (error) {
       console.error('Ошибка при добавлении продукта:', error.response?.data || error.message);

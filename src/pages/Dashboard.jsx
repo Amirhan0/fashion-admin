@@ -10,15 +10,19 @@ import CategoryIcon from '@mui/icons-material/Category';
 import { Box } from '@mui/material';
 import { Link } from 'react-router-dom';
 import ProductionQuantityLimitsIcon from '@mui/icons-material/ProductionQuantityLimits';
+import { fetchUsers } from '../redux/usersSlice';
+import GroupIcon from '@mui/icons-material/Group';
 const Dashboard = () => {
   const dispatch = useDispatch();
   const categories = useSelector((state) => state.categories.items);
   const loading = useSelector((state) => state.categories.loading);
   const products = useSelector((state) => state.products.items)
+  const users = useSelector((state) => state.users.items)
   
   useEffect(() => {
     dispatch(fetchCategories());
     dispatch(fetchProducts())
+    dispatch(fetchUsers())
   }, [dispatch]);
 
   return (
@@ -48,6 +52,18 @@ const Dashboard = () => {
           <CardContent>
             <Typography gutterBottom variant="h5" component="div">
               Количество продуктов: {loading ? 'Загрузка...' : products.length}
+            </Typography>
+          </CardContent>
+        </CardActionArea>
+      </Card>
+      <Card component={Link} to="/users" sx={{ maxWidth: 345 }}>
+        <CardActionArea>
+          <Box display="flex" justifyContent="center" alignItems="center" sx={{ height: 140 }}>
+            <GroupIcon sx={{ fontSize: 60 }} />
+          </Box>
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="div">
+              Количество пользователей: {loading ? 'Загрузка...' : users.length}
             </Typography>
           </CardContent>
         </CardActionArea>

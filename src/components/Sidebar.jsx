@@ -3,6 +3,7 @@ import { Drawer, List, ListItem, ListItemIcon, ListItemText } from '@mui/materia
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import CategoryIcon from '@mui/icons-material/Category';
+import PersonIcon from '@mui/icons-material/Person';
 import { Link } from 'react-router-dom';
 import { Toolbar} from '@mui/material';
 const Sidebar = () => {
@@ -28,6 +29,13 @@ const Sidebar = () => {
             <CategoryIcon />
           </ListItemIcon>
           <ListItemText primary="Категории" />
+        </ListItem>
+
+        <ListItem button component={Link} to="/users">
+          <ListItemIcon>
+            <PersonIcon />
+          </ListItemIcon>
+          <ListItemText primary="Пользователи" />
         </ListItem>
       </List>
     </Drawer>

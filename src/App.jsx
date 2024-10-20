@@ -6,6 +6,7 @@ import Header from './components/Header';
 import Dashboard from './pages/Dashboard';
 import Products from './pages/Products';
 import Categoryes from './pages/Categoryes';
+import Users from './pages/Users';
 const App = () => {
   return (
     <Router>
@@ -19,6 +20,7 @@ const App = () => {
             <Route path="/" element={<Dashboard />} />
             <Route path="/products" element={<Products />} />
             <Route path='/categoryes' element={<Categoryes/>} />
+            <Route path='/Users' element={<Users/>} />
           </Routes>
         </Box>
       </Box>

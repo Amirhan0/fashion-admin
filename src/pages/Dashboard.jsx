@@ -1,73 +1,88 @@
 import React, { useEffect } from 'react';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
-import CardActionArea from '@mui/material/CardActionArea';
+import { Card, CardContent, Typography, CardActionArea, Box } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCategories } from '../redux/categoryesSlice'; 
 import { fetchProducts } from '../redux/productsSlice'; 
-import CategoryIcon from '@mui/icons-material/Category';
-import { Box } from '@mui/material';
-import { Link } from 'react-router-dom';
-import ProductionQuantityLimitsIcon from '@mui/icons-material/ProductionQuantityLimits';
 import { fetchUsers } from '../redux/usersSlice';
-import GroupIcon from '@mui/icons-material/Group';
+import { fetchOrders } from '../redux/ordersSlice';
+import CategoryIcon from '@mui/icons-material/Category';
+import ProductionQuantityLimitsIcon from '@mui/icons-material/ProductionQuantityLimits';
+import PersonIcon from '@mui/icons-material/Person';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import { Link } from 'react-router-dom';
+
 const Dashboard = () => {
   const dispatch = useDispatch();
+
   const categories = useSelector((state) => state.categories.items);
-  const loading = useSelector((state) => state.categories.loading);
-  const products = useSelector((state) => state.products.items)
-  const users = useSelector((state) => state.users.items)
-  
+  const products = useSelector((state) => state.products.items);
+  const users = useSelector((state) => state.users.items);
+  const orders = useSelector((state) => state.orders.items);
+
+  const loadingCategories = useSelector((state) => state.categories.loading);
+  const loadingProducts = useSelector((state) => state.products.loading);
+  const loadingUsers = useSelector((state) => state.users.loading);
+  const loadingOrders = useSelector((state) => state.orders.loading);
+
   useEffect(() => {
     dispatch(fetchCategories());
-    dispatch(fetchProducts())
-    dispatch(fetchUsers())
+    dispatch(fetchProducts());
+    dispatch(fetchUsers());
+    dispatch(fetchOrders());
   }, [dispatch]);
+
+  const renderCard = (link, icon, title, count, loading) => (
+    <Card component={Link} to={link} sx={{ maxWidth: 345, marginBottom: 2 }}>
+      <CardActionArea>
+        <Box display="flex" justifyContent="center" alignItems="center" sx={{ height: 140 }}>
+          {icon}
+        </Box>
+        <CardContent>
+          <Typography gutterBottom variant="h5">
+            {title}: {loading ? 'Загрузка...' : count}
+          </Typography>
+        </CardContent>
+      </CardActionArea>
+    </Card>
+  );
 
   return (
     <div>
-      <Typography variant="h4">
+      <Typography variant="h4" gutterBottom>
         Добро пожаловать на главную
       </Typography>
 
-     
-      <Card component={Link} to="/categoryes" sx={{ maxWidth: 345 }}>
-        <CardActionArea>
-          <Box display="flex" justifyContent="center" alignItems="center" sx={{ height: 140 }}>
-            <CategoryIcon sx={{ fontSize: 60 }} />
-          </Box>
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
-              Количество категорий: {loading ? 'Загрузка...' : categories.length}
-            </Typography>
-          </CardContent>
-        </CardActionArea>
-      </Card>
-      <Card component={Link} to="/products" sx={{ maxWidth: 345 }}>
-        <CardActionArea>
-          <Box display="flex" justifyContent="center" alignItems="center" sx={{ height: 140 }}>
-            <ProductionQuantityLimitsIcon sx={{ fontSize: 60 }} />
-          </Box>
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
-              Количество продуктов: {loading ? 'Загрузка...' : products.length}
-            </Typography>
-          </CardContent>
-        </CardActionArea>
-      </Card>
-      <Card component={Link} to="/users" sx={{ maxWidth: 345 }}>
-        <CardActionArea>
-          <Box display="flex" justifyContent="center" alignItems="center" sx={{ height: 140 }}>
-            <GroupIcon sx={{ fontSize: 60 }} />
-          </Box>
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
-              Количество пользователей: {loading ? 'Загрузка...' : users.length}
-            </Typography>
-          </CardContent>
-        </CardActionArea>
-      </Card>
+      {renderCard(
+        "/categoryes",
+        <CategoryIcon sx={{ fontSize: 60 }} />,
+        "Категорий",
+        categories.length,
+        loadingCategories
+      )}
+
+      {renderCard(
+        "/products",
+        <ProductionQuantityLimitsIcon sx={{ fontSize: 60 }} />,
+        "Продуктов",
+        products.length,
+        loadingProducts
+      )}
+
+      {renderCard(
+        "/users",
+        <PersonIcon sx={{ fontSize: 60 }} />,
+        "Пользователей",
+        users.length,
+        loadingUsers
+      )}
+
+      {renderCard(
+        "/orders",
+        <ShoppingCartIcon sx={{ fontSize: 60 }} />,
+        "Заказов",
+        orders.length,
+        loadingOrders
+      )}
     </div>
   );
 };

@@ -23,7 +23,7 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { fetchProducts } from "../redux/productsSlice";
 import { fetchCategories } from "../redux/categoryesSlice";
-import ProductsAdd from "../components/productsAdd";
+import ProductsAdd from "../components/ProductsAdd";
 import ProductEdit from "../components/ProductEdit";
 
 const Products = () => {

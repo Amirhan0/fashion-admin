@@ -32,7 +32,7 @@ function AdminLogin() {
         <Box
           sx={{
             marginTop: 8,
-            display: 'flex',
+            display: 'flex',  
             flexDirection: 'column',
             alignItems: 'center',
           }}
